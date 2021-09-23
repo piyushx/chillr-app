@@ -2,34 +2,29 @@ import React, { useContext } from 'react'
 import CommentForm from './CommentForm'
 import CommentItem from "./CommentItem"
 import ContextAPI from "../contextAPI/ContextAPI"
-import {useHistory} from "react-router-dom"
+
 
 function OpenPost(props) {
     const Context = useContext(ContextAPI)
-    const {onepost, post, setpost, getonepost} = Context
-    const history = useHistory()
+    const { onepost } = Context
 
-    const {id, content, likes, comments} = onepost
-
-
-   
-        
+    const { id, postid, content, likes, comments} = onepost
 
     return (
-        <div className = "container my-3">
+        <div className="container my-3">
             <h4>{content}</h4>
             <p>Liked by: {likes.length}</p>
-            <CommentForm id={id} />
-            <div className = "container my-3">
-        <div className="row">
-            {
-                comments.map((eachcomment)=> 
-                <CommentItem comment = {eachcomment.content} userid = {eachcomment.byuser}/>
-                )
-            }
+            <CommentForm postid={postid} />
+            <div className="container my-3">
+                <div className="row">
+                    {
+                        comments.map((eachcomment) =>
+                            <CommentItem comment={eachcomment.content} userid={eachcomment.byuser} />
+                        )
+                    }
+                </div>
             </div>
-            </div>
-           
+
         </div>
     )
 }

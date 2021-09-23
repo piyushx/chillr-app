@@ -9,10 +9,10 @@ const userAuth = async(req,res,next)=> {
 
     try {
         const decryptedData = jwt.verify(token, SECRET);
-        req.userData = decryptedData.userData
+        req.userData = decryptedData.user
         next()
     } catch (error) {
-        res.status(400).send("Bad request")
+        res.status(400).send(error)
     }
 }
 
