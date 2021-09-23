@@ -7,7 +7,7 @@ const postSchema = new Schema({
         ref: "user"
     },
     post: String,
-    likes: Number,
+    likes: Array,
     comments: Array
 })
 

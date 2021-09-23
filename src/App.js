@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import ContextAPI from "../src/contextAPI/NoteState";
 import Homepage from "./components/Homepage";
 import {
@@ -13,7 +13,10 @@ import Editprofile from "./components/Editprofile"
 import Profile from "./components/Profile"
 import OpenPost from "./components/OpenPost"
 
+
 function App() {
+
+
   return (
     <ContextAPI>
       <Router>
@@ -47,6 +50,7 @@ function App() {
           <Route exact path= "/open">
           <Navbar/>
           <OpenPost/>
+          {/* */}
           </Route>
 
         </Switch>
