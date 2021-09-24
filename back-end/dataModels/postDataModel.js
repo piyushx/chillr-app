@@ -6,6 +6,7 @@ const postSchema = new Schema({
         type: Mongoose.Schema.Types.ObjectId,
         ref: "user"
     },
+    name: String,
     post: String,
     likes: Array,
     comments: Array

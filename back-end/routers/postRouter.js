@@ -12,10 +12,12 @@ router.get("/all", authorizeUser, async(req,res)=> {
 router.post("/new", authorizeUser, async(req,res)=> {
     const {post} = req.body
     const userid = req.userData.id
+    const name = req.userData.name
 
     const newPost = new postModel({
         user: userid,
-        post   
+        post,
+        name
     })
     const savePost = await newPost.save()
     res.json(savePost)
@@ -40,6 +42,13 @@ router.get("/user/:id", authorizeUser, async(req,res)=> {
 
     const userposts = await postModel.find({"user": userid})
     res.json(userposts)
+})
+
+router.get("/get/:id", authorizeUser, async(req,res)=> {
+    const postid = req.params.id
+    const post = await postModel.findById({_id: postid})
+    const userid = await req.userData.id
+    res.json(post, userid)
 })
 
 

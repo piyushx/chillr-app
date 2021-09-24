@@ -1,28 +1,52 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Editpostitem from './editpostitem'
 import ContextAPI from "../contextAPI/ContextAPI"
 
 function Dashboard() {
 
+
+    const [profile, setprofile] = useState({name: "", bio: ""})
+    const [userpost, setuserpost] = useState([])
+
+    const getuserdetails = async() => {
+        const response = await fetch(`http://localhost:5000/auth/getuser/614c9b8d475c28363d4bc675`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+            },
+        });
+    
+        const json = await response.json()
+        const userid = json._id
+        console.log(json);
+        setprofile({name: json.name, bio: json.bio})
+
+        const responses = await fetch(`http://localhost:5000/post/user/${userid}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+            },
+        });
+    
+        const jsn = await responses.json()
+        console.log(jsn);
+        setuserpost(jsn)
+    }
+
+
+    useEffect(() => {
+      getuserdetails()
+    }, [])
+
+
     //here we have to add profile details from middleware and API
-    const [profile, setprofile] = useState({
-        id: 102,
-        name: "Piyush kapoor",
-        bio: "Just writing my feelings out! I'm a student of literature and it's my passion to code. Been learning code since 2 months",
-        posts: 1
-    })
 
     //here we have to add all user specific notes through API
-    const [userpost, setuserpost] = useState([{
-        user: "102",
-        postid: "104",
-        content: "How's it going guys?",
-        likes: [],
-        comments: [{
-            content: "use google man!",
-            byuser: "107"
-        }]
-    }])
+    
+
+
 
     return (
         <div className="container">
@@ -35,12 +59,12 @@ function Dashboard() {
                         <div class="card-body">
                             <h5 class="card-title">{profile.name}</h5>
                             <p class="card-text">BIO: {profile.bio}</p>
-                            <p class="card-text"><small class="text-muted">Posts: {profile.posts}</small></p>
+                            <p class="card-text"><small class="text-muted">Posts: </small></p>
                         </div>
                     </div>
                 </div>
             </div>
-            {userpost.map((eachpost) => <Editpostitem id={eachpost.user} postid = {eachpost.postid} content={eachpost.content} likes={eachpost.likes} comments={eachpost.comments} />)}
+            {userpost.map((eachpost) => <Editpostitem userid={eachpost.user} postid = {eachpost._id} content={eachpost.post} likes={eachpost.likes} comments={eachpost.comments} />)}
 
         </div>
     )

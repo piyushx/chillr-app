@@ -55,6 +55,7 @@ router.post("/login", async(req,res)=> {
        return res.status(400).send("Invalid credentials")
     }
 
+
     const SECRET = "This is the secret which will be changed in .env file..."
     let data = {
         user: {
@@ -66,6 +67,20 @@ router.post("/login", async(req,res)=> {
     const authToken = jwt.sign(data, SECRET);
     res.json({sucess, authToken, data});
 
+
+})
+
+router.post("/getuser/:id", authorizeUser, async(req,res)=> {
+
+    try {
+        userID = req.params.id;
+
+        const userData = await userModel.findById(userID).select("-Password")
+        res.send(userData)
+
+    } catch (error) {
+        return res.status(500).send("Some error occured").json({ error });
+    }
 
 })
 
