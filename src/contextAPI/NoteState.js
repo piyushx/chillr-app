@@ -23,6 +23,20 @@ const Context = (props) => {
     }
 
     const postnew = async(post) => {
+        const response = await fetch(`${postHost}/new`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+            },
+            body: JSON.stringify({post})
+        });
+
+        const json = await response.json()
+        console.log(json);
+        
+        let newstate = posts.concat(json)
+        setposts(newstate)
 
     }
 
@@ -56,7 +70,7 @@ const Context = (props) => {
    
 
         return (
-            <ContextAPI.Provider value={{posts, onepost,getAll, getonepost, id, getid}}>
+            <ContextAPI.Provider value={{posts, onepost,getAll, getonepost, id, getid, postnew}}>
                 {props.children}
             </ContextAPI.Provider>
         )
