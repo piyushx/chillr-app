@@ -57,7 +57,7 @@ function Profile() {
                     </div>
                 </div>
             </div>
-            {userpost.map((eachpost) => <PostItem id={eachpost.user} postid={eachpost._id} content={eachpost.post} likes={eachpost.likes} comments={eachpost.comments} />)}
+            {userpost.map((eachpost) => <PostItem id={eachpost.user} username={eachpost.name} postid={eachpost._id} content={eachpost.post} likes={eachpost.likes} comments={eachpost.comments} />)}
 
         </div>
     )

@@ -5,10 +5,10 @@ const Context = (props) => {
 
     const postHost = "http://localhost:5000/post"
 
-   //this state provides all the posts created by all users
+    //this state provides all the posts created by all users
     const [posts, setposts] = useState([])
 
-    const getAll = async() => {
+    const getAll = async () => {
         const response = await fetch(`${postHost}/all`, {
             method: 'GET',
             headers: {
@@ -22,30 +22,30 @@ const Context = (props) => {
         setposts(json.posts)
     }
 
-    const postnew = async(post) => {
+    const postnew = async (post) => {
         const response = await fetch(`${postHost}/new`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
             },
-            body: JSON.stringify({post})
+            body: JSON.stringify({ post })
         });
 
         const json = await response.json()
         console.log(json);
-        
+
         let newstate = posts.concat(json)
         setposts(newstate)
 
     }
 
     //this state provides data of any particular post
-    const [onepost, setonepost] = useState({id: "", postid: "", content: "", likes: [], comments: []})
+    const [onepost, setonepost] = useState({ id: "", postid: "", content: "", likes: [], comments: [] })
 
     //this function will change the state of onepost and then we can pass the data as a prop through context API.
-    const getonepost = async(id, postid, post, likes, comments) => {
-        
+    const getonepost = async (id, postid, post, likes, comments) => {
+
         setonepost({
             id,
             postid,
@@ -58,22 +58,22 @@ const Context = (props) => {
     const [id, setid] = useState()
 
     const getid = (id) => {
-           setid(id)
-        }
+        setid(id)
+    }
 
 
-         //this function will run whenever someone clicks on any particular post
-    
+    //this function will run whenever someone clicks on any particular post
+
 
 
     //this function will add comments to any post from open post component | this function will help reflect the changed comments globally
-   
 
-        return (
-            <ContextAPI.Provider value={{posts, onepost,getAll, getonepost, id, getid, postnew}}>
-                {props.children}
-            </ContextAPI.Provider>
-        )
-    }
-    
+
+    return (
+        <ContextAPI.Provider value={{ posts, onepost, getAll, getonepost, id, getid, postnew }}>
+            {props.children}
+        </ContextAPI.Provider>
+    )
+}
+
 export default Context

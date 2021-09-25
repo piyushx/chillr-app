@@ -9,7 +9,7 @@ function Editpostitem(props) {
     const Context = useContext(ContextAPI)
     const { getonepost, addcomments} = Context
 
-    const { userid, postid,content, likes, comments } = props
+    const { userid, postid, username, content, likes, comments } = props
 
 
     return (

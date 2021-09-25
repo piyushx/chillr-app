@@ -19,7 +19,7 @@ function OpenPost(props) {
                 <div className="row">
                     {
                         comments.map((eachcomment) =>
-                            <CommentItem comment={eachcomment.comment} userid={eachcomment.userid} />
+                            <CommentItem comment={eachcomment.comment} userid={eachcomment.userid} name = {eachcomment.name}/>
                         )
                     }
                 </div>

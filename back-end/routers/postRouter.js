@@ -25,7 +25,7 @@ router.post("/new", authorizeUser, async(req,res)=> {
 
 router.put("/addcomment/:id", authorizeUser, async(req,res)=> {
     let {comment} = req.body
-    let newcomment = {comment, userid: req.userData.id}
+    let newcomment = {comment, userid: req.userData.id, name: req.userData.name}
     let particularPost = await postModel.findById(req.params.id)
     let updatedpost = {};
    updatedpost.user = particularPost.user
@@ -34,6 +34,7 @@ router.put("/addcomment/:id", authorizeUser, async(req,res)=> {
    updatedpost.comments = particularPost.comments.concat(newcomment)
 
     let particular = await postModel.findByIdAndUpdate(req.params.id, {$set: updatedpost}, {new:true})
+
     res.json(particular)
 })
 
