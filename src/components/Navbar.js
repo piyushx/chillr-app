@@ -4,9 +4,10 @@ import ContextAPI from "../contextAPI/ContextAPI"
 
 function Navbar() {
 
-    
- 
-
+    const history = useHistory()
+    const refresh = () => {
+        history.push("/homefeed")
+    }
     return (
         <div>
              <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -17,12 +18,13 @@ function Navbar() {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <Link className="nav-link" aria-current="page" to="/posts">Homefeed</Link>
+                        <li className="nav-item">
+                                <Link className="nav-link" to="/homefeed" onClick={refresh}>Homefeed</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/create"></Link>
+                                <Link className="nav-link" aria-current="page" to="/posts">Explore</Link>
                             </li>
+                           
                             <li className="nav-item">
                                 <Link className="nav-link" to="/edit">Your Profile</Link>
                             </li>

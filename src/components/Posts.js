@@ -3,6 +3,7 @@ import PostItem from "./PostItem"
 import NoteContext from "../contextAPI/ContextAPI"
 
 
+
 function Posts() {
 
     const Context = useContext(NoteContext);

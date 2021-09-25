@@ -21,7 +21,7 @@ router.post("/signup", async(req,res)=> {
            name: name,
            email: email,
            password:securePassword,
-           bio: bio
+           bio: bio,
         })
 
         const SECRET = "This is the secret which will be changed in .env file..."
@@ -30,7 +30,7 @@ router.post("/signup", async(req,res)=> {
                 id: user.id,
                 name: user.name,
                 password:securePassword,
-                bio: user.bio
+                bio: user.bio,
             }
         }
         
@@ -91,6 +91,22 @@ router.put("/edit", authorizeUser, async(req,res)=> {
     updatedProfile.email = req.userData.email
     updatedProfile.password = req.userData.password
     updatedProfile.bio = bio
+
+    let updateProfile = await userModel.findByIdAndUpdate(req.userData.id, {$set: updatedProfile}, {new:true})
+    res.json(updateProfile)
+})
+
+router.post("/add", authorizeUser, async(req,res)=> {
+    const {userid, username} = req.body
+
+    let particularuser = await userModel.findById(req.userData.id)
+    let updatedProfile = {};
+
+    updatedProfile.name = particularuser.name
+    updatedProfile.email = particularuser.email
+    updatedProfile.password = particularuser.password
+    updatedProfile.bio = particularuser.bio
+    updatedProfile.following = await particularuser.following.concat({userid, username})
 
     let updateProfile = await userModel.findByIdAndUpdate(req.userData.id, {$set: updatedProfile}, {new:true})
     res.json(updateProfile)

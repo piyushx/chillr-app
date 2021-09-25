@@ -9,6 +9,7 @@ const userSchema = new Schema({
     },
     password: String,
     bio: String,
+    following: Array
 })
 
 module.exports = Mongoose.model("user", userSchema);

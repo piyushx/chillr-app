@@ -4,6 +4,11 @@ import NoteContext from "../contextAPI/ContextAPI"
 
 function Dashboard() {
 
+    useEffect(() => {
+        getuserdetails()
+      }, [])
+  
+
     const Context = useContext(NoteContext);
 
 
@@ -68,9 +73,6 @@ function Dashboard() {
     }
 
 
-    useEffect(() => {
-      getuserdetails()
-    }, [])
 
 
     //here we have to add profile details from middleware and API

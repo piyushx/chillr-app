@@ -12,6 +12,7 @@ import Posts from "./components/Posts"
 import Editprofile from "./components/Editprofile"
 import Profile from "./components/Profile"
 import OpenPost from "./components/OpenPost"
+import Homefeed from "./components/Homefeed";
 
 
 function App() {
@@ -32,6 +33,11 @@ function App() {
           <Route exact path= "/posts">
           <Navbar/>
           <Posts/>
+          </Route>
+
+          <Route exact path= "/homefeed">
+          <Navbar/>
+          <Homefeed/>
           </Route>
 
         {/* This route will allow the user to edit his own profile info and posts */}
