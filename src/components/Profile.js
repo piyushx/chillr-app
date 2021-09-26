@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import PostItem from './PostItem'
 import ContextAPI from "../contextAPI/ContextAPI"
 
+
 function Profile() {
     const Context = useContext(ContextAPI);
     const { id } = Context
 
-    const [profile, setprofile] = useState({name: "", bio: ""})
+    const [profile, setprofile] = useState({name: "", bio: "", id: ""})
     const [userpost, setuserpost] = useState([])
 
     const getuserdetails = async(id) => {
@@ -14,26 +15,41 @@ function Profile() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+                "auth-token": localStorage.getItem("authtoken")
             },
         });
     
         const json = await response.json()
         const userid = json._id
         console.log(json);
-        setprofile({name: json.name, bio: json.bio})
+        setprofile({name: json.name, bio: json.bio , id: json._id})
 
         const responses = await fetch(`http://localhost:5000/post/user/${userid}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+                "auth-token": localStorage.getItem("authtoken")
             },
         });
     
         const jsn = await responses.json()
         console.log(jsn);
         setuserpost(jsn)
+    }
+
+    const addFollower = async(id, name) => {
+
+        const response = await fetch(`http://localhost:5000/auth/add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "auth-token": localStorage.getItem("authtoken")
+            },
+            body: JSON.stringify( {userid: id ,username: name})
+        });
+
+        const json = await response.json()
+        console.log(json);
     }
 
 
@@ -53,6 +69,7 @@ function Profile() {
                             <h5 class="card-title">{profile.name}</h5>
                             <p class="card-text">BIO: {profile.bio}</p>
                             <p class="card-text"><small class="text-muted">Posts: </small></p>
+                            <button className="btn btn-secondary" onClick={()=>addFollower(profile.id, profile.name)}>follow</button>
                         </div>
                     </div>
                 </div>

@@ -24,7 +24,7 @@ function CommentForm(props) {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+                "auth-token": localStorage.getItem("authtoken")
             },
             body: JSON.stringify({comment})
         })
@@ -46,7 +46,8 @@ function CommentForm(props) {
 
     //this function will change the state both locally and globally
     const addedcomments =() => {
-        addcomment(comment.comment, "614c7f4ecb1030deafdf21adnwckwm", onepost.postid)
+        let data = localStorage.getItem("id")
+        addcomment(comment.comment, data, onepost.postid)
     }
 
     return (

@@ -13,7 +13,7 @@ const Context = (props) => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+                "auth-token": localStorage.getItem("authtoken")
             },
         });
 
@@ -22,12 +22,13 @@ const Context = (props) => {
         setposts(json.posts)
     }
 
+    
     const postnew = async (post) => {
         const response = await fetch(`${postHost}/new`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+                "auth-token": localStorage.getItem("authtoken")
             },
             body: JSON.stringify({ post })
         });
@@ -61,6 +62,8 @@ const Context = (props) => {
         setid(id)
     }
 
+    const [allposts, setallpost] = useState([])
+
 
     
 
@@ -72,7 +75,7 @@ const Context = (props) => {
 
 
     return (
-        <ContextAPI.Provider value={{ posts, onepost, getAll, getonepost, id, getid, postnew }}>
+        <ContextAPI.Provider value={{ posts, onepost, getAll, getonepost, id, getid, postnew, allposts, setallpost}}>
             {props.children}
         </ContextAPI.Provider>
     )

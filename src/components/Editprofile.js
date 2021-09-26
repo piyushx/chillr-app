@@ -21,7 +21,7 @@ function Dashboard() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+                "auth-token": localStorage.getItem("authtoken")
             },
             body: JSON.stringify({ post })
         });
@@ -46,11 +46,12 @@ function Dashboard() {
     }
 
     const getuserdetails = async() => {
-        const response = await fetch(`http://localhost:5000/auth/getuser/614c9b8d475c28363d4bc675`, {
+        let data = localStorage.getItem("id")
+        const response = await fetch(`http://localhost:5000/auth/getuser/${data}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+                "auth-token": localStorage.getItem("authtoken")
             },
         });
     
@@ -63,7 +64,7 @@ function Dashboard() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+                "auth-token": localStorage.getItem("authtoken")
             },
         });
     
@@ -71,7 +72,6 @@ function Dashboard() {
         console.log(jsn);
         setuserpost(jsn)
     }
-
 
 
 

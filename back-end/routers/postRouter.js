@@ -9,6 +9,7 @@ router.get("/all", authorizeUser, async(req,res)=> {
     res.json({posts})
 })
 
+
 router.post("/new", authorizeUser, async(req,res)=> {
     const {post} = req.body
     const userid = req.userData.id

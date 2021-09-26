@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const userModel = require("../dataModels/userDataModel")
 const authorizeUser = require("../middleware/authorizeUser")
+const postModel = require("../dataModels/postDataModel")
+
 
 let sucess = false
 
@@ -30,13 +32,13 @@ router.post("/signup", async(req,res)=> {
                 id: user.id,
                 name: user.name,
                 password:securePassword,
-                bio: user.bio,
+                bio: user.bio
             }
         }
         
         sucess = true
         const authToken = jwt.sign(data, SECRET);
-        res.json({sucess, authToken, data });
+        res.json({sucess, authToken, data: data.user });
     }
 })
 
@@ -65,7 +67,7 @@ router.post("/login", async(req,res)=> {
     }
     sucess = true
     const authToken = jwt.sign(data, SECRET);
-    res.json({sucess, authToken, data});
+    res.json({sucess, authToken, data: data.user});
 
 
 })
@@ -110,6 +112,30 @@ router.post("/add", authorizeUser, async(req,res)=> {
 
     let updateProfile = await userModel.findByIdAndUpdate(req.userData.id, {$set: updatedProfile}, {new:true})
     res.json(updateProfile)
+})
+
+router.post("/followers", authorizeUser, async(req,res)=> {
+    let follower = req.body
+    console.log(follower);
+    
+    let array = []
+    for (let index = 0; index < follower.length; index++) {
+        const element = follower[index];
+        let userid = element.userid
+
+        let posts = await postModel.find({"user": userid})
+
+        for (let i = 0; i < posts.length; i++) {
+            const element = posts[i];
+            array.push(element)
+        }
+
+        
+    }
+
+    console.log(array);
+
+    res.json({array})
 })
 
 

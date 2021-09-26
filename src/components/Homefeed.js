@@ -5,7 +5,7 @@ import NoteContext from "../contextAPI/ContextAPI"
 function Homefeed() {
 
     useEffect(() => {
-        userposts("614c9b8d475c28363d4bc675")
+        userposts(localStorage.getItem("id"))
      }, [])
      
     const Context = useContext(NoteContext);
@@ -31,35 +31,23 @@ function Homefeed() {
             },
         });
         const json = await response.json()
-        console.log(json);
+   
 
         let followers = await json.following
-
         console.log(followers);
 
-        const getfollowerposts = async(element)=> { 
-            const responses = await fetch(`http://localhost:5000/post/user/${element.userid}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
-                },
-            });
+        const responses = await fetch(`http://localhost:5000/auth/followers`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+            },
+            body:  JSON.stringify(followers)
+        });
 
-            let jsn = await responses.json()
-
-            console.log(jsn);
-
-          setallpost(allposts.concat(jsn))
-
-            
-        }
-      
-        for (let index = 0; index < followers.length; index++) {
-            const element = followers[index];
-             getfollowerposts(element)
-        }
-          
+        const jsn = await responses.json()
+        console.log(jsn);
+        setallpost(jsn.array)
 
     }
 

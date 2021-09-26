@@ -20,7 +20,7 @@ function Posts() {
        getAll()
     }, [])
 
-    const postneww = async(post) => {
+    const postneww = (post) => {
         postnew(post)
         console.log(post);
     }
@@ -28,7 +28,7 @@ function Posts() {
 
     return (
         <div className="container my-3">
-            <h3 className="my-4">Hey Piyush, Here are all the posts: </h3>
+            <h3 className="my-4">Hey {localStorage.getItem("name")}, Here are all the posts: </h3>
             <div class="row g-1">
             <div class="col">
                     <input type="text" class="form-control" name="post" id="post" placeholder="Enter a comment" onChange={onChange}/>
