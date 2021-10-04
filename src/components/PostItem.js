@@ -3,7 +3,6 @@ import OpenPost from "./OpenPost"
 import { useHistory, Link } from 'react-router-dom'
 import ContextAPI from "../contextAPI/ContextAPI"
 
-
 function PostItem(props) {
 
     const {userid, username, postid, content, likes, comments} = props
@@ -11,11 +10,12 @@ function PostItem(props) {
 
     const {getonepost, getid} = Context
 
-    const [like, setlike] = useState(likes.length)
+    const [like, setlike] = useState("Like")
+    const [likeLength, setlikeLength] = useState(likes.length)
     let [follows, setfollower] = useState("follow")
 
     const checkiffollowed = async(userid) => {
-        const responses = await fetch(`http://localhost:5000/post/ifliked/${userid}`, {
+        const responses = await fetch(`http://localhost:5000/post/iffollowed/${userid}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -33,8 +33,28 @@ function PostItem(props) {
     
     }
 
+    const checkifliked = async(postid) => {
+        const responsess = await fetch(`http://localhost:5000/post/ifliked/${postid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "auth-token": localStorage.getItem("authtoken")
+                },
+            });
+
+        const jssn = await responsess.json()
+
+        if(jssn === true){
+            setlike("unlike")
+        } else {
+            setlike("like")
+        }
+    
+    }
+
     useEffect(() => {
         checkiffollowed(userid)
+        checkifliked(postid)
     }, [])
 
     const addFollower = async(id, name) => {
@@ -53,13 +73,24 @@ function PostItem(props) {
             console.log(json);
             setfollower("unfollow")
         } else {
+            const responsive = await fetch(`http://localhost:5000/auth/remove`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "auth-token": localStorage.getItem("authtoken")
+                },
+                body: JSON.stringify( {userid: id ,username: name})
+            });
+    
+            const json = await responsive.json()
+            console.log(json);
             setfollower("follow")
         }
       
     }
 
     const likePost = async(id) => {
-        if(like === likes.length) {
+        if(like === "like") {
             const response = await fetch(`http://localhost:5000/post/like/${id}`, {
                 method: 'PUT',
                 headers: {
@@ -68,12 +99,21 @@ function PostItem(props) {
                 },
             });
             console.log(response);
-            setlike(likes.length+1)
+            setlikeLength(likes.length+1)
+            setlike("unlike")
         } else {
-            setlike(likes.length)
+            const responsess = await fetch(`http://localhost:5000/post/unlike/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "auth-token": localStorage.getItem("authtoken")
+                },
+             });
+            console.log(responsess);
+            setlikeLength(likeLength-1)
+            setlike("like")
         }
 
-       
     }
 
     return (
@@ -85,9 +125,9 @@ function PostItem(props) {
                     <div class="d-flex justify-content-between">
                     <Link className="nav-link" aria-current="page" to="/profile"><button className="btn btn-primary" onClick={()=>getid(userid)}>by : { username}</button></Link>
                     <h5 className="card-title mb-4">{content}</h5>
-                    <p className="card-text">Likes: {like}</p>
+                    <p className="card-text">Likes: {likeLength}</p>
                     <p className="card-text">Comments: {comments.length}</p>
-                    <button class="fas fa-heart" onClick={()=>likePost(postid)}></button>
+                    <button  onClick={()=>likePost(postid)}>{like}</button>
                     <Link className="nav-link" aria-current="page" to="/open"><button className="btn btn-primary"  onClick={()=> getonepost(userid,postid, content,likes,comments)}>view all comments</button></Link>
                     <button className="btn btn-secondary" onClick={()=>addFollower(userid, username)}>{follows}</button>
 

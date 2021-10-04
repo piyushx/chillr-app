@@ -114,6 +114,24 @@ router.post("/add", authorizeUser, async(req,res)=> {
     res.json(updateProfile)
 })
 
+
+router.post("/remove", authorizeUser, async(req,res)=> {
+    const {userid} = req.body
+
+    let particularuser = await userModel.findById(req.userData.id)
+    let updatedProfile = {};
+
+    updatedProfile.name = particularuser.name
+    updatedProfile.email = particularuser.email
+    updatedProfile.password = particularuser.password
+    updatedProfile.bio = particularuser.bio
+    const newFollowers = await particularuser.following.filter((follower)=> {return follower.userid !== userid})
+    updatedProfile.following = newFollowers
+
+    let updateProfile = await userModel.findByIdAndUpdate(req.userData.id, {$set: updatedProfile}, {new:true})
+    res.json(updateProfile)
+})
+
 router.post("/followers", authorizeUser, async(req,res)=> {
     let follower = req.body
     console.log(follower);
