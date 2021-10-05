@@ -77,7 +77,7 @@ const Context = (props) => {
 
 
     return (
-        <ContextAPI.Provider value={{ posts, onepost, getAll, getonepost, id, getid, postnew, allposts, setallpost}}>
+        <ContextAPI.Provider value={{ posts, onepost, getAll, getonepost, id, getid, postnew, allposts, setposts, setallpost}}>
             {props.children}
         </ContextAPI.Provider>
     )

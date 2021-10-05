@@ -59,8 +59,10 @@ function Homefeed() {
     }
 
     const postneww = async(post, category) => {
-        postnew(post, category)
         setpost("")
+        setpost("")
+        postnew(post, category)
+       
     }
 
     return (

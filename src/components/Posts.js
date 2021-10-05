@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState} from 'react'
 import PostItem from "./PostItem"
 import NoteContext from "../contextAPI/ContextAPI"
 
@@ -6,12 +6,17 @@ import NoteContext from "../contextAPI/ContextAPI"
 
 function Posts() {
 
+    
+
     const Context = useContext(NoteContext);
     const { posts, postnew, getAll} = Context
 
     const [post, setpost] = useState({post: ""})
 
+
     const [categorypost, setcategorypost] = useState([])
+
+    const [allPosts, setallPosts] = useState(posts)
 
     const getCategory = async(category) => {
         const categoryposts = posts.filter((post)=> {return post.category == category})  
