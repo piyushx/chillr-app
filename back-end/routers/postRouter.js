@@ -10,15 +10,22 @@ router.get("/all", authorizeUser, async(req,res)=> {
     res.json({posts})
 })
 
+router.get("/category/:id", authorizeUser, async(req,res)=> {
+    const category = req.params.id  
+    const categoryPosts = await postModel.find({category: category})
+    res.json(categoryPosts)
+})
+
 router.post("/new", authorizeUser, async(req,res)=> {
-    const {post} = req.body
+    const {post, category} = req.body
     const userid = req.userData.id
     const name = req.userData.name
 
     const newPost = new postModel({
         user: userid,
         post,
-        name
+        name,
+        category: category
     })
     const savePost = await newPost.save()
     res.json(savePost)
@@ -33,6 +40,7 @@ router.put("/addcomment/:id", authorizeUser, async(req,res)=> {
    updatedpost.post = particularPost.post
    updatedpost.likes = particularPost.likes
    updatedpost.comments = particularPost.comments.concat(newcomment)
+   updatedpost.category = particularPost.category
 
     let particular = await postModel.findByIdAndUpdate(req.params.id, {$set: updatedpost}, {new:true})
 
@@ -84,6 +92,7 @@ router.put("/like/:id", authorizeUser, async(req,res)=> {
    updatedpost.post = particularPost.post
    updatedpost.likes = particularPost.likes.concat(newlike)
    updatedpost.comments = particularPost.comments
+   updatedpost.category = particularPost.category
 
     let particular = await postModel.findByIdAndUpdate(req.params.id, {$set: updatedpost}, {new:true})
 

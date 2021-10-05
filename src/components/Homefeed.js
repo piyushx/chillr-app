@@ -16,9 +16,16 @@ function Homefeed() {
 
     const [post, setpost] = useState({post: ""})
 
+    const [category, setcategory] = useState({category: ""})
+
     const onChange = (event) => {
         setpost({ ...post, [event.target.name]: event.target.value })
         console.log(post);
+    }
+
+    const onChanges = (event) => {
+        setcategory({ ...post, [event.target.name]: event.target.value })
+        console.log(category);
     }
 
     const userposts = async(id) => {
@@ -51,9 +58,9 @@ function Homefeed() {
 
     }
 
-    const postneww = async(post) => {
-        postnew(post)
-        console.log(post);
+    const postneww = async(post, category) => {
+        postnew(post, category)
+        setpost("")
     }
 
     return (
@@ -62,9 +69,10 @@ function Homefeed() {
         <div class="row g-1">
         <div class="col">
                 <input type="text" class="form-control" name="post" id="post" placeholder="Enter a comment" onChange={onChange}/>
+                <input type="text" class="form-control" name="category" id="category" placeholder="category" onChange={onChanges}/>
             </div>
             <div class="col-2">
-                <button class="btn btn-primary mb-3" onClick={()=> postneww(post.post)}>Post now</button>
+                <button class="btn btn-primary mb-3" onClick={()=> postneww(post.post , category.category)}>Post now</button>
             </div>
         </div>
        

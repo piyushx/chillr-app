@@ -8,6 +8,8 @@ const Context = (props) => {
     //this state provides all the posts created by all users
     const [posts, setposts] = useState([])
 
+
+
     const getAll = async () => {
         const response = await fetch(`${postHost}/all`, {
             method: 'GET',
@@ -23,14 +25,14 @@ const Context = (props) => {
     }
 
     
-    const postnew = async (post) => {
+    const postnew = async (post, category) => {
         const response = await fetch(`${postHost}/new`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 "auth-token": localStorage.getItem("authtoken")
             },
-            body: JSON.stringify({ post })
+            body: JSON.stringify({ post: post, category: category })
         });
 
         const json = await response.json()

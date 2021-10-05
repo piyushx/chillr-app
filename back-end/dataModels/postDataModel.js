@@ -9,7 +9,8 @@ const postSchema = new Schema({
     name: String,
     post: String,
     likes: Array,
-    comments: Array
+    comments: Array,
+    category: String
 })
 
 module.exports = Mongoose.model("post", postSchema);
