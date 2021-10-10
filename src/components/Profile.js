@@ -7,8 +7,10 @@ function Profile() {
     const Context = useContext(ContextAPI);
     const { id } = Context
 
+ 
     const [profile, setprofile] = useState({name: "", bio: "", id: ""})
     const [userpost, setuserpost] = useState([])
+    let [follows, setfollower] = useState("follow")
 
     const getuserdetails = async(id) => {
         const response = await fetch(`http://localhost:5000/auth/getuser/${id}`, {
@@ -37,24 +39,61 @@ function Profile() {
         setuserpost(jsn)
     }
 
+    const checkiffollowed = async(userid) => {
+        const responses = await fetch(`http://localhost:5000/post/iffollowed/${userid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "auth-token": localStorage.getItem("authtoken")
+                },
+            });
+
+        const jsn = await responses.json()
+
+        if(jsn === true){
+            setfollower("unfollow")
+        } else {
+            setfollower("follow")
+        }
+    
+    }
+
     const addFollower = async(id, name) => {
 
-        const response = await fetch(`http://localhost:5000/auth/add`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                "auth-token": localStorage.getItem("authtoken")
-            },
-            body: JSON.stringify( {userid: id ,username: name})
-        });
-
-        const json = await response.json()
-        console.log(json);
+        if(follows === "follow") {
+            const response = await fetch(`http://localhost:5000/auth/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "auth-token": localStorage.getItem("authtoken")
+                },
+                body: JSON.stringify( {userid: id ,username: name})
+            });
+    
+            const json = await response.json()
+            console.log(json);
+            setfollower("unfollow")
+        } else {
+            const responsive = await fetch(`http://localhost:5000/auth/remove`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "auth-token": localStorage.getItem("authtoken")
+                },
+                body: JSON.stringify( {userid: id ,username: name})
+            });
+    
+            const json = await responsive.json()
+            console.log(json);
+            setfollower("follow")
+        }
+      
     }
 
 
     useEffect(() => {
       getuserdetails(id)
+      checkiffollowed(id)
     }, [])
 
     return (
@@ -68,13 +107,13 @@ function Profile() {
                         <div class="card-body">
                             <h5 class="card-title">{profile.name}</h5>
                             <p class="card-text">BIO: {profile.bio}</p>
-                            <p class="card-text"><small class="text-muted">Posts: </small></p>
-                            <button className="btn btn-secondary" onClick={()=>addFollower(profile.id, profile.name)}>follow</button>
+                            <p class="card-text"><small class="text-muted">Posts: {userpost.length}</small></p>
+                            <button className="btn btn-secondary" onClick={()=>addFollower(profile.id, profile.name)}>{follows}</button>
                         </div>
                     </div>
                 </div>
             </div>
-            {userpost.map((eachpost) => <PostItem id={eachpost.user} username={eachpost.name} postid={eachpost._id} content={eachpost.post} likes={eachpost.likes} comments={eachpost.comments} />)}
+            {userpost.map((eachpost) => <PostItem id={eachpost.user} followbtn = "hide" username={eachpost.name} postid={eachpost._id} content={eachpost.post} likes={eachpost.likes} comments={eachpost.comments} />)}
 
         </div>
     )

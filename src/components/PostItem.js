@@ -5,14 +5,15 @@ import ContextAPI from "../contextAPI/ContextAPI"
 
 function PostItem(props) {
 
-    const {userid, username, postid, content, likes, comments} = props
+    const {userid, username, postid, content, likes, comments, followbtn, likebtn} = props
     const Context = useContext(ContextAPI)
 
-    const {getonepost, getid} = Context
+    const {getonepost, getid, onepost, setonepost} = Context
 
     const [like, setlike] = useState("Like")
     const [likeLength, setlikeLength] = useState(likes.length)
     let [follows, setfollower] = useState("follow")
+
 
     const checkiffollowed = async(userid) => {
         const responses = await fetch(`http://localhost:5000/post/iffollowed/${userid}`, {
@@ -100,6 +101,7 @@ function PostItem(props) {
             });
             console.log(response);
             setlikeLength(likes.length+1)
+            
             setlike("unlike")
         } else {
             const responsess = await fetch(`http://localhost:5000/post/unlike/${id}`, {
@@ -116,30 +118,117 @@ function PostItem(props) {
 
     }
 
-    return (
-        <div>
-        <div className="row">
-            <div className="col-sm-11 my-4">
-                <div className="card p-2">
-                    <div className="card-body">
-                    <div class="d-flex justify-content-between">
-                    <Link className="nav-link" aria-current="page" to="/profile"><button className="btn btn-primary" onClick={()=>getid(userid)}>by : { username}</button></Link>
-                    <h5 className="card-title mb-4">{content}</h5>
-                    <p className="card-text">Likes: {likeLength}</p>
-                    <p className="card-text">Comments: {comments.length}</p>
-                    <button  onClick={()=>likePost(postid)}>{like}</button>
-                    <Link className="nav-link" aria-current="page" to="/open"><button className="btn btn-primary"  onClick={()=> getonepost(userid,postid, content,likes,comments)}>view all comments</button></Link>
-                    <button className="btn btn-secondary" onClick={()=>addFollower(userid, username)}>{follows}</button>
-
+    if(followbtn === "hide" & likebtn === "hide") {
+            return (
+                <div>
+                <div className="row">
+                    <div className="col-sm-11 my-4">
+                        <div className="card p-2">
+                            <div className="card-body">
+                            <div class="d-flex justify-content-between">
+                            <Link className="nav-link" aria-current="page" to="/profile"><button className="btn btn-primary" onClick={()=>getid(userid)}>by : { username}</button></Link>
+                            <h5 className="card-title mb-4">{content}</h5>
+                            <p className="card-text">Likes: {likeLength}</p>
+                            <p className="card-text">Comments: {comments.length}</p>
+                            
+                            <Link className="nav-link" aria-current="page" to="/open"><button className="btn btn-primary"  onClick={()=> getonepost(userid,postid, content,likes,comments)}>view all comments</button></Link>
+                        
+                            </div>
+                              
+                            </div>
+                        </div>
                     </div>
-                      
-                    </div>
-                </div>
+                    
             </div>
-            
-    </div>
-    </div>
-    )
-}
+            </div>
+            )
+        }
+
+        if(followbtn === "hide" & likebtn != "hide"){
+            return (
+                <div>
+                <div className="row">
+                    <div className="col-sm-11 my-4">
+                        <div className="card p-2">
+                            <div className="card-body">
+                            <div class="d-flex justify-content-between">
+                            <Link className="nav-link" aria-current="page" to="/profile"><button className="btn btn-primary" onClick={()=>getid(userid)}>by : { username}</button></Link>
+                            <h5 className="card-title mb-4">{content}</h5>
+                            <p className="card-text">Likes: {likeLength}</p>
+                            <p className="card-text">Comments: {comments.length}</p>
+                            
+                            <Link className="nav-link" aria-current="page" to="/open"><button className="btn btn-primary"  onClick={()=> getonepost(userid,postid, content,likes,comments, likeLength)}>view all comments</button></Link>
+                            <button  onClick={()=>likePost(postid)}>{like}</button>
+                            </div>
+                              
+                            </div>
+                        </div>
+                    </div>
+                    
+            </div>
+            </div>
+            )
+
+        }
+
+        if(likebtn === "hide" & followbtn != "hide") {
+            return (
+                <div>
+                <div className="row">
+                    <div className="col-sm-11 my-4">
+                        <div className="card p-2">
+                            <div className="card-body">
+                            <div class="d-flex justify-content-between">
+                            <Link className="nav-link" aria-current="page" to="/profile"><button className="btn btn-primary" onClick={()=>getid(userid)}>by : { username}</button></Link>
+                            <h5 className="card-title mb-4">{content}</h5>
+                            <p className="card-text">Likes: {likeLength}</p>
+                            <p className="card-text">Comments: {comments.length}</p>
+                            <Link className="nav-link" aria-current="page" to="/open"><button className="btn btn-primary"  onClick={()=> getonepost(userid,postid, content,likes,comments)}>view all comments</button></Link>
+                            <button className="btn btn-secondary" onClick={()=>addFollower(userid, username)}>{follows}</button>
+                            </div>
+                              
+                            </div>
+                        </div>
+                    </div>
+                    
+            </div>
+            </div>
+            )
+        }  else {
+            return (
+                <div>
+                <div className="row">
+                    <div className="col-sm-11 my-4">
+                        <div className="card p-2">
+                            <div className="card-body">
+                            <div class="d-flex justify-content-between">
+                            <Link className="nav-link" aria-current="page" to="/profile"><button className="btn btn-primary" onClick={()=>getid(userid)}>by : { username}</button></Link>
+                            <h5 className="card-title mb-4">{content}</h5>
+                            <p className="card-text">Likes: {likeLength}</p>
+                            <p className="card-text">Comments: {comments.length}</p>
+                            <button  onClick={()=>likePost(postid)}>{like}</button>
+                            <Link className="nav-link" aria-current="page" to="/open"><button className="btn btn-primary"  onClick={()=> getonepost(userid,postid, content,likes,comments)}>view all comments</button></Link>
+                            <button className="btn btn-secondary" onClick={()=>addFollower(userid, username)}>{follows}</button>
+                            </div>
+                              
+                            </div>
+                        </div>
+                    </div>
+                    
+            </div>
+            </div>
+            )
+
+        }
+
+       
+    }
+       
+        
+      
+    
+
+    
+
 
 export default PostItem

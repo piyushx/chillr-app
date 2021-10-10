@@ -9,7 +9,6 @@ function Homefeed() {
      }, [])
      
     const Context = useContext(NoteContext);
-    const { postnew} = Context
 
     const [allposts, setallpost] = useState([])
 
@@ -34,7 +33,7 @@ function Homefeed() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+                "auth-token": localStorage.getItem("authtoken")
             },
         });
         const json = await response.json()
@@ -47,7 +46,7 @@ function Homefeed() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0YzliOGQ0NzVjMjgzNjNkNGJjNjc1IiwibmFtZSI6IkdlbnVpbmUgdXNlciJ9LCJpYXQiOjE2MzI0NTg2MDV9.xOY5xqeIVq8mmyRUYWyXCJUIYtuLcDVgVLcIsoQk5BY"
+                "auth-token": localStorage.getItem("authtoken")
             },
             body:  JSON.stringify(followers)
         });
@@ -58,11 +57,25 @@ function Homefeed() {
 
     }
 
+    const postnew = async (post, category) => {
+        const response = await fetch(`http://localhost:5000/post/new`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "auth-token": localStorage.getItem("authtoken")
+            },
+            body: JSON.stringify({ post: post, category: category })
+        }); 
+
+        const json = await response.json()
+        console.log(json, "This one");
+
+      let allnewposts = allposts.concat(json)
+      setallpost(allnewposts)
+    }
+
     const postneww = async(post, category) => {
-        setpost("")
-        setpost("")
         postnew(post, category)
-       
     }
 
     return (

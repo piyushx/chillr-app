@@ -47,6 +47,22 @@ router.put("/addcomment/:id", authorizeUser, async(req,res)=> {
     res.json(particular)
 })
 
+router.put("/update/:id", authorizeUser, async(req,res)=> {
+    let {newpost} = req.body
+    console.log(newpost, req.params.id);
+    let particularPost = await postModel.findById(req.params.id)
+    let updatedpost = {};
+   updatedpost.user = particularPost.user
+   updatedpost.post = newpost
+   updatedpost.likes = particularPost.likes
+   updatedpost.comments = particularPost.comments
+   updatedpost.category = particularPost.category
+
+    let particular = await postModel.findByIdAndUpdate(req.params.id, {$set: updatedpost}, {new:true})
+
+    res.json(particular)
+})
+
 router.get("/iffollowed/:id", authorizeUser, async(req,res)=> {
     let usertobefollowed = req.params.id
     let particularuser = await userModel.findById(req.userData.id)
@@ -125,6 +141,16 @@ router.get("/get/:id", authorizeUser, async(req,res)=> {
     const post = await postModel.findById({_id: postid})
     const userid = await req.userData.id
     res.json(post, userid)
+})
+
+router.delete("/delete/:id", authorizeUser, async(req,res)=> {
+    postModel.findByIdAndDelete(req.params.id, (err)=> {
+        if(err) {
+            console.log(err);
+        } else {
+            res.json("Deleted data")
+        }
+    })
 })
 
 

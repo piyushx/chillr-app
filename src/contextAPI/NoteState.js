@@ -24,6 +24,7 @@ const Context = (props) => {
         setposts(json.posts)
     }
 
+
     
     const postnew = async (post, category) => {
         const response = await fetch(`${postHost}/new`, {
@@ -33,12 +34,13 @@ const Context = (props) => {
                 "auth-token": localStorage.getItem("authtoken")
             },
             body: JSON.stringify({ post: post, category: category })
-        });
+        }); 
 
         const json = await response.json()
-        console.log(json);
+        console.log(json, "This one");
 
         let newstate = posts.concat(json)
+        console.log(newstate);
         setposts(newstate)
 
     }
@@ -67,6 +69,8 @@ const Context = (props) => {
     const [allposts, setallpost] = useState([])
 
 
+
+
     
 
     //this function will run whenever someone clicks on any particular post
@@ -77,7 +81,7 @@ const Context = (props) => {
 
 
     return (
-        <ContextAPI.Provider value={{ posts, onepost, getAll, getonepost, id, getid, postnew, allposts, setposts, setallpost}}>
+        <ContextAPI.Provider value={{ posts, onepost, getAll, getonepost, id, getid, postnew, allposts, setposts, setallpost, setonepost}}>
             {props.children}
         </ContextAPI.Provider>
     )
