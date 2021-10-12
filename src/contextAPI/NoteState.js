@@ -44,6 +44,7 @@ const Context = (props) => {
         setposts(newstate)
 
     }
+    
 
     //this state provides data of any particular post
     const [onepost, setonepost] = useState({ id: "", postid: "", content: "", likes: [], comments: [] })
@@ -51,12 +52,24 @@ const Context = (props) => {
     //this function will change the state of onepost and then we can pass the data as a prop through context API.
     const getonepost = async (id, postid, post, likes, comments) => {
 
+        const response = await fetch(`${postHost}/get/${postid}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "auth-token": localStorage.getItem("authtoken")
+            },
+        });
+
+        const json = await response.json()
+        console.log(json.likes);
+    
+
         setonepost({
             id,
             postid,
-            post,
-            likes,
-            comments
+            post: json.post,
+            likes: json.likes,
+            comments: json.comments
         }) //this function will run whenever someone clicks on any particular post
     }
 
@@ -81,7 +94,7 @@ const Context = (props) => {
 
 
     return (
-        <ContextAPI.Provider value={{ posts, onepost, getAll, getonepost, id, getid, postnew, allposts, setposts, setallpost, setonepost}}>
+        <ContextAPI.Provider value={{ posts, onepost, getAll, getonepost, id, getid, postnew, allposts, setposts, setallpost}}>
             {props.children}
         </ContextAPI.Provider>
     )

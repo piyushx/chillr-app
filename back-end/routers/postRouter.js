@@ -138,9 +138,8 @@ router.get("/user/:id", authorizeUser, async(req,res)=> {
 
 router.get("/get/:id", authorizeUser, async(req,res)=> {
     const postid = req.params.id
-    const post = await postModel.findById({_id: postid})
-    const userid = await req.userData.id
-    res.json(post, userid)
+    const post = await postModel.findById({"_id": postid})
+    res.json(post)
 })
 
 router.delete("/delete/:id", authorizeUser, async(req,res)=> {

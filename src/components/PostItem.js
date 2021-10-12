@@ -8,7 +8,7 @@ function PostItem(props) {
     const {userid, username, postid, content, likes, comments, followbtn, likebtn} = props
     const Context = useContext(ContextAPI)
 
-    const {getonepost, getid, onepost, setonepost} = Context
+    const {getonepost, getid} = Context
 
     const [like, setlike] = useState("Like")
     const [likeLength, setlikeLength] = useState(likes.length)
@@ -101,7 +101,6 @@ function PostItem(props) {
             });
             console.log(response);
             setlikeLength(likes.length+1)
-            
             setlike("unlike")
         } else {
             const responsess = await fetch(`http://localhost:5000/post/unlike/${id}`, {
@@ -157,7 +156,7 @@ function PostItem(props) {
                             <p className="card-text">Likes: {likeLength}</p>
                             <p className="card-text">Comments: {comments.length}</p>
                             
-                            <Link className="nav-link" aria-current="page" to="/open"><button className="btn btn-primary"  onClick={()=> getonepost(userid,postid, content,likes,comments, likeLength)}>view all comments</button></Link>
+                            <Link className="nav-link" aria-current="page" to="/open"><button className="btn btn-primary"  onClick={()=> getonepost(userid,postid, content,likes,comments)}>view all comments</button></Link>
                             <button  onClick={()=>likePost(postid)}>{like}</button>
                             </div>
                               
@@ -184,7 +183,7 @@ function PostItem(props) {
                             <p className="card-text">Likes: {likeLength}</p>
                             <p className="card-text">Comments: {comments.length}</p>
                             <Link className="nav-link" aria-current="page" to="/open"><button className="btn btn-primary"  onClick={()=> getonepost(userid,postid, content,likes,comments)}>view all comments</button></Link>
-                            <button className="btn btn-secondary" onClick={()=>addFollower(userid, username)}>{follows}</button>
+        
                             </div>
                               
                             </div>
@@ -194,7 +193,9 @@ function PostItem(props) {
             </div>
             </div>
             )
-        }  else {
+        }
+
+        else {
             return (
                 <div>
                 <div className="row">
@@ -220,10 +221,10 @@ function PostItem(props) {
             )
 
         }
-
        
     }
-       
+      
+
         
       
     

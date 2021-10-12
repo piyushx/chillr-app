@@ -11,7 +11,6 @@ function OpenPost(props) {
     const {id, postid, post, likes, comments} = onepost
     const [like, setlike] = useState("Like")
     const [likeLength, setlikeLength] = useState(likes.length)
-    
 
     useEffect(() => {
         checkifliked(postid)
@@ -30,6 +29,7 @@ function OpenPost(props) {
 
         if(jssn === true){
             setlike("unlike")
+            
         } else {
             setlike("like")
         }
@@ -46,7 +46,7 @@ function OpenPost(props) {
                 },
             });
             console.log(response);
-            setlikeLength(likes.length+1)
+            setlikeLength(likeLength+1)
             setlike("unlike")
         } else {
             const responsess = await fetch(`http://localhost:5000/post/unlike/${id}`, {
