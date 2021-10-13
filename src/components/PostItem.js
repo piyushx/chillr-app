@@ -183,7 +183,7 @@ function PostItem(props) {
                             <p className="card-text">Likes: {likeLength}</p>
                             <p className="card-text">Comments: {comments.length}</p>
                             <Link className="nav-link" aria-current="page" to="/open"><button className="btn btn-primary"  onClick={()=> getonepost(userid,postid, content,likes,comments)}>view all comments</button></Link>
-        
+                            <button className="btn btn-secondary" onClick={()=>addFollower(userid, username)}>{follows}</button>
                             </div>
                               
                             </div>

@@ -1,5 +1,8 @@
 import { useState } from "react"
+import { useHistory } from "react-router"
 import ContextAPI from "./ContextAPI"
+
+
 
 const Context = (props) => {
 
@@ -47,30 +50,18 @@ const Context = (props) => {
     
 
     //this state provides data of any particular post
-    const [onepost, setonepost] = useState({ id: "", postid: "", content: "", likes: [], comments: [] })
+    const [onepost, setonepost] = useState({ id: "", postid: "", comments: [] })
 
     //this function will change the state of onepost and then we can pass the data as a prop through context API.
     const getonepost = async (id, postid, post, likes, comments) => {
 
-        const response = await fetch(`${postHost}/get/${postid}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                "auth-token": localStorage.getItem("authtoken")
-            },
-        });
-
-        const json = await response.json()
-        console.log(json.likes);
-    
-
         setonepost({
             id,
             postid,
-            post: json.post,
-            likes: json.likes,
-            comments: json.comments
+            comments
         }) //this function will run whenever someone clicks on any particular post
+
+
     }
 
     const [id, setid] = useState()

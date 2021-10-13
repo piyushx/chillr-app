@@ -8,13 +8,40 @@ function OpenPost(props) {
     const Context = useContext(ContextAPI)
     const { onepost, getonepost } = Context
     const { getid} = Context
-    const {id, postid, post, likes, comments} = onepost
+    const {id, postid , comments} = onepost
     const [like, setlike] = useState("Like")
-    const [likeLength, setlikeLength] = useState(likes.length)
+    const [postdetails, setpostdetails] = useState({ content: "", likes: [] })
+    const [likeLength, setlikeLength] = useState()
 
+
+    const getthepost = async(postid) => {
+        const response = await fetch(`http://localhost:5000/post/get/${postid}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "auth-token": localStorage.getItem("authtoken")
+            },
+        });
+
+        const json = await response.json()
+
+        setpostdetails({
+            content: json.post,
+            likes: json.likes,
+        })
+        setlikeLength(json.likes.length)
+    
+    }
+   
+    const {content, likes} = postdetails
+    
+ 
     useEffect(() => {
         checkifliked(postid)
+        getthepost(postid)
     }, [])
+
+   
 
     const checkifliked = async(postid) => {
         const responsess = await fetch(`http://localhost:5000/post/ifliked/${postid}`, {
@@ -65,7 +92,7 @@ function OpenPost(props) {
     
     return (
         <div className="container my-3">
-            <h4>{post}</h4>
+            <h4>{content}</h4>
 
             <p>Liked by: {likeLength}</p>
             <CommentForm postid={postid} />
